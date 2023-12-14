@@ -1,0 +1,174 @@
+---
+title: "STA 138 Final Project"
+author: "Connor Young"
+date: "12/6/2023"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load Data
+```{r}
+byss = read.csv("/Users/andrewmuench/desktop/Byssinosis.csv")
+head(byss)
+```
+
+```{r}
+# change Workspace to factor
+byss$Workspace = factor(byss$Workspace, levels = c("3", "2", "1"))
+```
+
+```{r}
+# add Total column equal to Byssinosis + Non.Byssinosis
+byss$Total = byss$Byssinosis + byss$Non.Byssinosis
+```
+
+```{r}
+# remove rows which have no total
+byss = byss[byss$Total!=0,]
+```
+
+```{r}
+# unique values of each predictor variable
+sapply(byss[1:5], function(x) unique(x))
+```
+
+### Logistic Regression Models
+#### All Additive Terms and No Interctions
+```{r}
+glm1 = glm(cbind(Byssinosis, Non.Byssinosis)~Employment + Smoking + Sex + Race + Workspace,
+           family=binomial(),
+           data=byss)
+summary(glm1)
+BIC(glm1)
+confint.default(glm1)
+```
+
+The variables that were statistically significant if the significance level was less than 0.0001 are SmokingYes, Employment >=20, and Workspace 1.  The variables that were statistically significant if the significance level is 0.01 is employment 10-19, SmokingYes, Employment >=20, and Workspace 1 have positive coefficients which would suggest that as these variables increase so does the likelihood of having byssinosis. If we were to increase the significance level to 0.01 we could say the same of employment 10-19.Based on the confidence intervals of the coefficients of these variables, these variables all have positive coefficients.  Which means that we are 95% confident for all three variables that they are positive relationships.
+In order to see which predictors we should include in our regression to fit the best model, we will use forward stepwise selection. It will start with the empty model and continue adding predictor variables with the AIC as the selection criterion. The final model after using forward stepwise selection includes the following predictor variables: the intercept (the base case is if Workspace is rated a 3, the worker doesn't smoke, and was employed for less than 10 years), Workspace, Smoking, and Employment.
+
+#### Forward Step-Wise Regression
+```{r}
+result1 = step(glm(cbind(Byssinosis, Non.Byssinosis)~1, binomial(), byss),
+                  scope = ~Employment*Smoking*Sex*Race*Workspace,
+                  k=log(72),
+                  trace=0,
+                  direction="forward")
+summary(result1)
+BIC(result1)
+confint.default(result1)
+```
+
+#### Compare the Two Models w/ Likelihood Ratio Test
+```{r}
+# H_0: models are equivalent -> use simpler model
+# H_1: models are not equivalent -> use more complex model
+anv = anova(result1, glm1)
+pvalue = 1-pchisq(anv[2, 4], anv[2,3])
+pvalue
+```
+
+#### Variable Modifications
+```{r}
+# changing Workplace var
+# 2 & 3 -> 3 (less dusty)
+# 1 -> 1 (more dusty)
+byss2 = byss
+byss2$Workspace[byss2$Workspace == 2] = 3
+```
+
+```{r}
+# new stepwise w/ Workplace modification
+new1 = step(glm(cbind(Byssinosis, Non.Byssinosis)~1, binomial(), byss2),
+                  scope = ~Employment*Smoking*Sex*Race*Workspace,
+                  k=log(72),
+                  trace=0,
+                  direction="forward")
+summary(new1)
+BIC(new1)
+confint.default(new1)
+1-pchisq(anova(new1, result1)[2, 4], anova(new1, result1)[2,3]) # compare new1 & result1 w/ LRT
+```
+
+```{r}
+# changing Employment var
+# 10-19 & >=20 -> >=10
+byss2$Employment[byss2$Employment == "10-19" | byss2$Employment == ">=20"] = ">=10"
+```
+
+```{r}
+# new stepwise w/ Employment modification
+new2 = step(glm(cbind(Byssinosis, Non.Byssinosis)~1, binomial(), byss2),
+                  scope = ~Employment*Smoking*Sex*Race*Workspace,
+                  k=log(72),
+                  trace=0,
+                  direction="forward")
+summary(new2)
+BIC(new2)
+confint.default(new2)
+1-pchisq(anova(new2, result1)[2, 4], anova(new2, result1)[2,3]) # compare new2 & result1 w/ LRT
+1-pchisq(anova(new2, new1)[2, 4], anova(new2, new1)[2,3]) # compare new2 & new1 w/ LRT
+```
+
+#### Logistic Regression Diagnostics
+
+To determine how well our model fits the data, we will look at its deviance residuals. A residual is a measure of the difference between an observed value and a predicted value. The most basic residual for our models is the raw difference between the observed value (Byssinosis status: $y_i \in \{0, 1\}$) and the predicted probability ($\hat{\pi_i} \in [0,1]$). This residual will be denoted as $e_i$ and has the form
+$$
+  e_i = y_i - \hat{\pi_i} \in [-1, 1].
+$$
+The deviance residual, $d_i$, is based on deviance which is derived from a likelihood ratio test comparing the fitted logistic model and a *saturated* model which fits each data point perfectly. The formula to calculate the deviance residuals is
+$$
+\begin{aligned}
+  d_i &= \text{sign}(e_i)\sqrt{\text{Deviance}} \\
+  &= \text{sign}(e_i) \sqrt{-2 \left[ y_i\log\hat{\pi_i} + (1-y_i)\log(1-\hat{\pi_i}) \right]}.
+\end{aligned}
+$$
+
+The values of these deviance residuals measure how much the predicted probabilities from our model differ from the observed data and whether our model is under- or over-fitting for certain predictor variable values. 
+
+Large values for deviance residuals indicate poor fit and small values indicate good fit. A positive deviance residual indicates our model is under-predicting for a certain set of predictor variable values, i.e., the observed value is 1 and the predicted probability is less than 1. A negative deviance residual indicates our model is over-predicting for a certain set of predictor variable values, i.e., the observed value is 0 and the predicted probability is greater than 0.
+
+A good model fit is indicated by deviance residuals which are evenly distributed and relatively close to 0. Thus, if a smooth line is drawn to "average" the deviance residuals, we would like this line to be relatively flat and close to the line at $d_i=0$.
+
+The plot and interpretation of the deviance residuals for our logistic regression model is shown below.
+
+```{r}
+# new2
+ry = residuals(new2, type="deviance")
+rx = qlogis(fitted.values(new2))
+
+plot(rx, ry,
+     xlab = "Fitted Log-Odds",
+     ylab = "Deviance Residual",
+     main = "Forward Stepwise Regression w/ Variable Modifications",
+     col = "black")
+lines(loess.smooth(rx, ry), col="red")
+abline(h=0, lty=2, col="grey")
+```
+
+From the plot above, we see that the fitted smooth line is relatively straight (after log-odds of -4) and close to 0, with a peak at around $(-5, 0.8)$ and the rest of the line at $d_i \approx -0.35$. It appears that at low log-odds, this model is somewhat over-predicting, but at log-odds greater than around -4.75, this model is somewhat under-predicting. Overall, the deviance residuals appear to be relatively equally distributed above and below 0 (~37% and ~63% respectively), and ~95% of the residuals have an absolute value less than 1.5. Thus, we consider this model to be a relatively good fit.
+
+
+
+Conclusion:
+
+Select, fit and then interpret an appropriate statistical model.  
+
+For the project we made use of these following models: 
+
+Model 1 : logistic regression model with all additive terms 
+Model 2: forward stepwise logistic regression with all additive terms
+Model 3: the forward stepwise model with only additive terms of the statistically significant variables, 
+Model 4: the forward stepwise model with all the interaction terms of  the statistically significant variables and the previous model a modification to the employment term. This modification to the employment variable was to change employment to be from 10-19 years to be all employees with over 10 years or greater of employment.
+
+Of all these models, the Model 4 had the smallest AIC() and BIC(). AIC and BIC are measurements of goodness of fit of models that account for model complexity.  Having a lower AIC and BIC value would mean that the model would be a better fit comparatively to other models.  This would suggest that the Model 4 had the best fit.  We also conducted a likelihood ratio test between all pairings of the models with lowest AICs and BICS which were Models 2,3 and 4  From these tests we all had large p-values(respectively) between the three combinations of the LRT test which would mean that the simpler model is not significantly worse than more complex plots.  However, this does not mean that the simplest model is the best fit.  The model with all the interaction terms of the statistically significant variables with the employee modification had the best fit. Observing the diagnostic plot of model 4 shows that the deviance residuals are relatively equally distributed which would suggest that the model is a relatively good fit.  With the AICs, BICs, LRT and the diagnostic plots we conclude that model 4 is the best fit
+
+
+
+ Can you conclude in particular that workplace dustiness contributes to the chance of byssinosis? You will be graded on succinctly using valid statistical tools to uncover meaningful associations in the data and convincingly communicating them.
+
+Beginning from the model that best fits the data from above, we can look at the summary of the model.  This summary of the model would suggest that Workspace 1, Employment >=10 and SmokingYes all have positive and statistically significant effects on the chance of contracting byssinosis.  Using the Wald tests and the confidence intervals of the odds ratios for the variables, we see that all of these variables have statistically significant effects on the chance of contracting byssinosis.  Because Workspace 1, the most dusty workplace,  is among these statistically significant variables with a positive effect on the chance of contracting byssinosis, we conclude that Workplace dustiness positively contributes to the chance of byssinosis.  
