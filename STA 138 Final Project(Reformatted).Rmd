@@ -1,11 +1,13 @@
 ---
-title: STA 138 Final Project
-author: STA 138 | Andrew Muench, Michelle Tsang, Connor Young | December 2023
+title: "STA 138 Final Project"
+author: "STA 138 | Andrew Muench, Michelle Tsang, Connor Young | December 2023"
 header-includes:
-   - \usepackage{graphicx,verbatim}
-   - \renewcommand{\abstractname}{}
+- \usepackage{graphicx,verbatim}
+- \renewcommand{\abstractname}{}
+output:
+  html_document:
+    df_print: paged
 geometry: margin=0.75in
-output: pdf_document
 ---
 
 ## Introduction
@@ -92,7 +94,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, echo=FALSE, fig.height = 6, fig.width = 6, fig.align = "center"}
-byss = read.csv("/Users/andrewmuench/desktop/Byssinosis.csv")
+byss = read.csv("./Dataset/Byssinosis.csv")
 # change Workspace to factor
 byss$Workspace = factor(byss$Workspace, levels = c("3", "2", "1"))
 # add Total column equal to Byssinosis + Non.Byssinosis

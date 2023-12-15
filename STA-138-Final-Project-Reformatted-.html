@@ -1631,165 +1631,158 @@ display: none;
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>In this study, we will be analyzing data collected in 1973 from a
-large cotton textile company in North Carolina. This data was collected
-to investigate the presence of a disease called byssinosis which workers
-exposed to cotton dust may contract. The purpose of our study is to
-investigate the relationship between this disease and the level of
-dustiness of the workplace, smoking status, sex, race, and length of
-employment.</p>
-<p>These relationships are important to investigate because if there is
-a significant relationship between these factors and the chance of
-contracting byssinosis, then the company may be liable and need to
-implement changes to protect employees. To do so, we will fit and
-interpret several logistic regression models.</p>
-</div>
-<div id="data-description" class="section level2">
-<h2>Data Description</h2>
-<p>The data was collected on 5,419 workers and consists of six
-variables. The variables are there possible values are shown below.</p>
-<ul>
-<li><p>Type of work place [1 (most dusty), 2 (less dusty), 3 (least
-duty)]</p></li>
-<li><p>Employment, years [&lt;10, 10-19, &gt;=20]</p></li>
-<li><p>Smoking [Yes, No (not in the last 5 years)]</p></li>
-<li><p>Sex [M (Male), F (Female)]</p></li>
-<li><p>Race [W (White), O (Other)]</p></li>
-<li><p>Byssinosis [Yes, No]</p></li>
-</ul>
+<p>In this study we will be trying to understand whether the workplace
+dustiness had an effect for contracting byssinosis. This is important to
+investigate because if workplace conditions, in this scenario dustiness,
+had an effect on whether employees contracted byssinosis which would
+make the company liable. This would cost the company in compensating for
+the medical conditions of the employees with byssinosis. In order to
+investigate whether workplace conditions had an effect on contracting
+byssinosis, we will try our best to model the data and to observe the
+effect of the variables on the data.</p>
 </div>
 <div id="results" class="section level2">
 <h2>Results</h2>
-<div id="full-additive-model" class="section level3">
-<h3>Full Additive Model</h3>
-<p>We will begin our analysis by fitting the data to an additive
-logistic model which uses all of the variables and no interaction terms.
-The estimated coefficients produced by this model, their associated Wald
-test p-values, and model’s BIC are shown below.</p>
-<p>The estimated coefficients for each parameter represent the log-odds
-ratio compared to the base case used by the model. The base case is
-Employment: &lt; 10 years, Smoking: No, Sex: Female, Race: Other, and
-Workspace: 3 (least dusty). A positive log-odds ratio for a parameter
-indicates that, all other things equal, an individual will have a higher
-log-odds (chance) of contracting byssinosis compared to the base case. A
-negative log-odds ratio indicates under the same conditions represents a
-lower log-odds (chance) of contracting byssinosis compared to the base
-case. Thus, the results from this model indicate that longer employment,
-smoking, and a dustier workplace increase the chance of byssinosis and
-being male and white reduce the chance of byssinosis.</p>
-<p>However, when analyzing the Wald test p-values for each parameter
-with a Bonferroni Correction, we find that several parameters are not
-significant to the model’s performance. We will be using a significance
-level of <span class="math inline">\(\alpha=0.05\)</span>, so with 8
-parameters, our Bonferroni corrected significance level for each
-parameter is 0.00625. Since the Wald test uses a null hypothesis of the
-parameter coefficient being equal to 0, using this significance level,
-we find we fail to reject this null hypothesis for Employment 10-19, Sex
-M, Race W, and Workspace 2. Thus, the coefficients for these parameters
-are not significantly different from 0 and are not related to the
-contraction of byssinosis.</p>
-<p>Additionally, the BIC of this model is 182.377. We will compare our
-following models to this value to measure potential improvement. For our
-next model. we will use Forward Stepwise Regression with BIC as the step
-criteria. The results of fitting this model are shown below.</p>
-</div>
-<div id="forward-stepwise-regression" class="section level3">
-<h3>Forward Stepwise Regression</h3>
-<p>From the above table, we see that the process of stepwise regression
-has concluded that Sex and Race are not sufficiently significant to be
-included. This agrees with the results of the Wald tests performed on
-our additive model, so this is not surprising. Similarly to our additive
-model, this model also indicates positive log-odds ratios for more
-dustiness, smoking, and longer employment. This model also has a BIC of
-174.779 which is lower than the BIC of our first model, so this model
-has a better fit.</p>
-<p>We can compare the equivalency of our two models using a likelihood
-ratio test with a null hypothesis of the models being equivalent, so the
-simpler model is preferred. The resulting p-value of this test is 0.687.
-Using a significance level of <span class="math inline">\(\alpha=0.05\)</span>, we fail to reject the null
-hypothesis. Thus, we conclude that the full additive and forward
-stepwise models are equivalent, so we prefer the stepwise model because
-it is simpler.</p>
-<p>When analyzing the Wald test p-values for each parameter with a
-Bonferroni corrected significance level of 0.00833, we find the log-odds
-ratios of Workspace 2 and Employment 10-19 are not significantly
-different than 0. To investigate whether we can adjust our data to
-improve the model, we will modify these variables.</p>
-</div>
-<div id="forward-stepwise-regression-workspace-modification" class="section level3">
-<h3>Forward Stepwise Regression: Workspace Modification</h3>
-<p>We will first modify the Workspace variable by combining Workspace 2
-and 3 into a single category. Thus, the Workspace variable will now have
-the values [1 (more dusty), 3 (less dusty)]. The result of fitting a
-Forward Stepwise Regression using BIC and the modified data is shown
-below.</p>
-<p>From the results above, we see that this stepwise regression resulted
-in the same final model as our previous stepwise regression, but without
-Workspace 2 since that has been combined to the base case. We also see
-the same positive log-odds ratios for each parameter, so this model also
-concludes that a dustier workspace, smoking, and longer employment are
-related to a worker’s chance of contracting byssinosis. This model also
-has a BIC of 171.0489 which is lower than our previous stepwise
-regression, which would indicate that this model fits our data
-better.</p>
-<p>When computing a likelihood ratio test to compare the equivalency
-between this new stepwise model and our previous stepwise model, we get
-a p-value of 0.505. Using a significance level of <span class="math inline">\(\alpha=0.05\)</span>, we fail to reject the null
-hypothesis. Thus, we conclude that our new stepwise and previous
-stepwise models are equivalent, so we prefer the newer stepwise model
-because it is simpler.</p>
-<p>When analyzing the Wald test p-values for each parameter with a
-Bonferroni corrected significance level of 0.01, we find the log-odds
-ratio of Employment 10-19 is not significantly different than 0. Thus,
-we will modify this variable and create our final stepwise model.</p>
-</div>
-<div id="forward-stepwise-regression-employment-modification" class="section level3">
-<h3>Forward Stepwise Regression: Employment Modification</h3>
-<p>Using Bonferroni Correction suggests that Employment 10-19 is not
-significantly different compared to Employment &lt; 10. However, since
-the p-value is still relatively low (&lt;0.05), we will combine
-Employment 10-19 and Employment <span class="math inline">\(\geq\)</span> 20. Thus, the employment variable
-will now have the values [&lt;10, <span class="math inline">\(\geq\)</span> 10].</p>
-<p>From the results above, we see that this stepwise regression resulted
-in the same final model as our previous stepwise regressions, but with
-the effects of our variable modifications. We also see the same positive
-log-odds ratios for each parameter, so this model also concludes that a
-dustier workspace, smoking, and longer employment are related to a
-worker’s chance of contracting byssinosis. This model also has a BIC of
-167.289 which is lower than our previous stepwise regressions, which
-indicates that this model fits our data best.</p>
-<p>When computing a likelihood ratio test to compare the equivalency
-between this new stepwise model and our first stepwise model, we get a
-p-value of 0.651. Using a significance level of <span class="math inline">\(\alpha=0.05\)</span>, we fail to reject the null
-hypothesis. Thus, we conclude that our new stepwise and our first
-stepwise models are equivalent, so we prefer this newer stepwise model
-because it is simpler.</p>
-<p>We can also compute a likelihood ratio test to compare the
-equivalency between this new stepwise model and our modified previous
-stepwise model, and we get a p-value of 0.52. Using a significance level
-of <span class="math inline">\(\alpha=0.05\)</span>, we fail to reject
-the null hypothesis. Thus, we conclude that our new stepwise and
-previous stepwise models are equivalent, so we prefer this newer
-stepwise model because it is simpler.</p>
-<p>When analyzing the Wald test p-values for each parameter with a
-Bonferroni corrected significance level of 0.0125, we find that all of
-the parameters are significantly different than 0, so all of the
-parameters are significant and related to byssinosis.</p>
-</div>
-<div id="logistic-regression-diagnostics" class="section level3">
-<h3>Logistic Regression Diagnostics</h3>
+<p>Below is the results of our analysis to find the model of best fit
+for the variables and to analyze the relationship between Workplace and
+byssonnossis. As we see in Figure 1, we have the summary of the logistic
+model of the additive terms of all variables. The variables that were
+statistically significant if the significance level was less than 0.0001
+are SmokingYes, Employment &gt;=20, and Workspace 1. The variables that
+were statistically significant if the significance level is 0.01 is
+employment 10-19, SmokingYes, Employment &gt;=20, and Workspace 1 have
+positive coefficients which would suggest that as these variables
+increase so does the likelihood of having byssinosis. If we were to
+increase the significance level to 0.01 we could say the same of
+employment 10-19.Based on the confidence intervals of the coefficients
+of these variables, these variables all have positive coefficients.
+Which means that we are 95% confident for all three variables that they
+are positive relationships. In order to see which predictors we should
+include in our regression to fit the best model, we will use forward
+stepwise selection. It will start with the empty model and continue
+adding predictor variables with the AIC as the selection criterion. The
+final model after using forward stepwise selection includes the
+following predictor variables: the intercept (the base case is if
+Workspace is rated a 3, the worker doesn’t smoke, and was employed for
+less than 10 years), Workspace, Smoking, and Employment.</p>
+<p>In order to see which predictors we should include in our regression
+to fit the best model, we will use forward stepwise selection(Figure 2).
+It will start with the empty model and continue adding predictor
+variables with the AIC as the selection criterion. The final model after
+using forward stepwise selection includes the following predictor
+variables: the intercept (the base case is if Workspace is rated a 3,
+the worker doesn’t smoke, and was employed for less than 10 years),
+Workspace, Smoking, and Employment.</p>
+<p>We will use the Wald test to determine whether or not each variable
+from the stepwise model selection is significant with <span class="math inline">\(H_0: \beta_{Workspace2} = 0, \beta_{Workspace1} =
+0, ..., \beta_{Employment10-19} = 0\)</span>. When conducting the Wald
+test on the model using a 0.05 significance level, we are able to reject
+the null hypothesis and find that every variable is significant
+<em>except</em> for Workspace2 since its p-value of 0.499 is greater
+than 0.05. There is not enough evidence to conclude that there is a
+difference in the chance of getting byssinosis if the Workspace was
+rated a 3 or 2.</p>
+<p>We reach the same conclusion when we create a 95% confidence interval
+of the odds ratio for determining if there is an effect on that variable
+on the chances of getting byssinosis. Having an odds ratio of 1 means
+that variable is does not create a difference in the chances of getting
+byssinosis. In this case, only the Workspace2 variable contains 1 in its
+confidence interval of odds ratio (0.693, 2.119), so it is possible that
+there is no difference in the chance of getting byssinosis if the
+Workspace was rated a 3 or 2.</p>
+<p>The odds ratio confidence intervals for the variables Workspace1,
+SmokingYes, Employment&gt;=20, and Employment10-19 of (0.693, 2.119),
+(1.308, 2.783), (1.353, 2.762), and (1.017, 2.701) respectively, are all
+greater than 1, meaning having a Workspace rating of 1, being a smoker,
+being employed for more than 20 years, or being employed for 10-19 years
+increases the chance of having byssinosis. The intercept (base case of
+Workspace with rating of 3, no smoking, and being employed for less than
+10 years) has an odds ratio confidence interval of (0.003, 0.008) is
+less than 1, meaning if the worker is the base case, they are less
+likely to have byssinosis.</p>
+<p>We will use the Wald test to test the independence between the
+categorical variable Workspace and the chance of getting byssinosis with
+<span class="math inline">\(H_0: \beta_{Workspace2} = 0\)</span> and
+<span class="math inline">\(H_0: \beta_{Workspace1} = 0\)</span> at 0.05
+significance level(Figure 3). We find that both the intercept (when
+Workspace is rated a 3) and Workspace1 (Workspace rated a 3 vs 1) have a
+p-value approximately 0, so we have enough evidence to reject the null
+hypothesis and conclude that there is a relationship between the
+Workspace being rated a 3 or a 1 and the chance of having
+byssinosis.</p>
+<p>However, the same can’t be said for Workspace2 since its p-value of
+0.588 is greater than 0.05. We fail to reject the null hypothesis, there
+is not enough evidence to say there is a relationship between Workspace
+being rated a 2 (vs rated a 3) and the chance of having byssinosis
+(Workspace2 is independent of having byssionsis).</p>
+<p>We reach the same conclusion when constructing a 95% confidence
+interval of the odds ratio for each variable (Figure4). We are 95%
+confident that the odds ratio (OR) of the intercept (Workspace is rated
+a 3) and Workspace1 are between (0.008, 0.016) and (10.666, 22.436)
+respectively. Since OR = 1 is not in either of these interval, both
+these variables have a relationship on the chance on having byssinosis.
+Since the odds ratio interval of (0.008, 0.016) is less than 1, the
+chance of having byssinosis when Workspace is rated a 3 is less likely
+to occur. Conversely, the odds ratio interval of (10.666, 22.436) is
+greater than 1, so the chance of having byssinosis when Workspace is
+rated a 3 vs a rating of 1 is more likely to occur.</p>
+<p>We are 95% confident that the odds ratio interval of the Workspace2
+is between (0.667, 2.038). Since OR = 1 is contained in the interval, it
+is possible that Workspace being rated a 2 (vs rated a 3) is independent
+from the chance of having byssinosis. After combining Workplace2 and
+Workplace 3 to be less dusty and Workplace1 to be more dusty, we conduct
+another Wald test(Figure 4: Part 1) on all our predictors after doing
+forward stepwise model selection using 0.05 significance level. The new
+model contains the intercept, Workspace1 (more dusty), SmokingYes,
+Employment&gt;=20, and Employment10-19.</p>
+<p>The p-values for all the variables are less than 0.05, meaning we can
+reject the null hypothesis that and have sufficient evidence to conclude
+there is a difference between the variables listed above and the
+baseline case (workspace is less dusty, no smoking, and employment is
+less than 10 years) on the chance of having byssinosis.</p>
+<p>The confidence intervals for the variables Workspace1, SmokingYes,
+Employment&gt;=20, and Employment10-19 of (10.487, 20.456), (1.306,
+2.778), (1.350, 2.755), and (1.012, 2.668) respectively, are have odds
+ratios greater than 1, meaning having a Workspace that is more dusty,
+being a smoker, being employed for more than 20 years, or being employed
+for 10-19 years increases the chance of having byssinosis.</p>
+<p>After combining Employment&gt;20 and Employment10-19 to be being
+employed for more than 10 years and Employment&lt;10 to be employed for
+less than 10 years (Figure 4 Part 2), we conduct another Wald test on
+all our predictors after doing forward stepwise model selection using
+0.05 significance level. The new model contains the intercept,
+Workspace1 (more dusty), SmokingYes, Employment&gt;=10.</p>
+<p>The p-values for all the variables are less than 0.05, meaning we can
+reject the null hypothesis that and have sufficient evidence to conclude
+there is a difference between the variables listed above and the
+baseline case (workspace is less dusty, no smoking, and employment is
+less than 10 years) on the chance of having byssinosis.</p>
+<p>The confidence intervals for the variables Workspace1, SmokingYes,
+and Employment&gt;=10 of (10.474, 20.426), (1.296, 2.753), (1.324,
+2.582) respectively, are have odds ratios greater than 1, meaning having
+a Workspace that is more dusty, being a smoker, being employed for more
+than 20 years, or being employed for 10-19 years increases the chance of
+having byssinosis.</p>
+<p>In order to see if any of the models were better fits compared to
+each other, we used the LRT test to compare all 3 combinations of the
+variables(Figure 5). Based on the p-values of the tests from these
+tests, which are all above 0.5, no complex model is a better fit than
+the simpler model. Which means we would employ the simplest model, which
+is the forward stepwise model with all interaction terms and the
+employee modifications.</p>
 <p>To determine how well our model fits the data, we will look at its
-deviance residuals. A residual is a measure of the difference between an
-observed value and a predicted value. The most basic residual for our
-models is the raw difference between the observed value (Byssinosis
-status: <span class="math inline">\(y_i \in \{0, 1\}\)</span>) and the
-predicted probability (<span class="math inline">\(\hat{\pi_i} \in
-[0,1]\)</span>). This residual will be denoted as <span class="math inline">\(e_i\)</span> and has the form <span class="math display">\[
-  e_i = y_i - \hat{\pi_i} \in [-1, 1].
-\]</span> The deviance residual, <span class="math inline">\(d_i\)</span>, is based on deviance which is
-derived from a likelihood ratio test comparing the fitted logistic model
-and a <em>saturated</em> model which fits each data point perfectly. The
-formula to calculate the deviance residuals is <span class="math display">\[
+deviance residuals (Figure 6). A residual is a measure of the difference
+between an observed value and a predicted value. The most basic residual
+for our models is the raw difference between the observed value
+(Byssinosis status: <span class="math inline">\(y_i \in \{0,
+1\}\)</span>) and the predicted probability (<span class="math inline">\(\hat{\pi_i} \in [0,1]\)</span>). This residual
+will be denoted as <span class="math inline">\(e_i\)</span> and has the
+form.</p>
+<p>The deviance residual, <span class="math inline">\(d_i\)</span>, is
+based on deviance which is derived from a likelihood ratio test
+comparing the fitted logistic model and a <em>saturated</em> model which
+fits each data point perfectly. The formula to calculate the deviance
+residuals is <span class="math display">\[
 \begin{aligned}
   d_i &amp;= \text{sign}(e_i)\sqrt{\text{Deviance}} \\
   &amp;= \text{sign}(e_i) \sqrt{-2 \left[ y_i\log\hat{\pi_i} +
@@ -1812,10 +1805,7 @@ the observed value is 0 and the predicted probability is greater than
 distributed and relatively close to 0. Thus, if a smooth line is drawn
 to “average” the deviance residuals, we would like this line to be
 relatively flat and close to the line at <span class="math inline">\(d_i=0\)</span>.</p>
-<p>The plot and interpretation of the deviance residuals for our
-logistic regression model is shown below.</p>
-<p><img src="data:image/png;base64,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" width="672" /></p>
-<p>From the plot above, we see that the fitted smooth line is relatively
+<p>From the Figure 7, we see that the fitted smooth line is relatively
 straight (after log-odds of -4) and close to 0, with a peak at around
 <span class="math inline">\((-5, 0.8)\)</span> and the rest of the line
 at <span class="math inline">\(d_i \approx -0.35\)</span>. It appears
@@ -1826,53 +1816,240 @@ relatively equally distributed above and below 0 (~37% and ~63%
 respectively), and ~95% of the residuals have an absolute value less
 than 1.5. Thus, we consider this model to be a relatively good fit.</p>
 </div>
-</div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
-<p>In this study, we fit four logistic regression models:</p>
-<ul>
-<li><p>Model 1: All additive terms with no interaction terms</p></li>
-<li><p>Model 2: Forward Stepwsie Regression</p></li>
-<li><p>Model 3: Forward Stepwise Regression with Workspace
-modifications</p></li>
-<li><p>Model 4: Forward Stepwise Regression with Workspace and
-Employment modifications</p></li>
-</ul>
-<p>Of these models, Model 4 had the smallest BIC and all of its
-parameters were significant based on Wald tests at Bonferroni corrected
-significance levels. BIC is a measure of goodness of fit which accounts
-for model complexity through the addition of a penalty term that scales
-on the number of parameters in the model. Having a low BIC indicates
-that the model is a better fit compared to models with higher BICs.
-Thus, BIC suggests that Model 4 has the best fit for our data. We also
-conducted likelihood ratio tests to compare the equivalency of our
-models as parameters were dropped and variables were modified. In doing
-so, we found that our simpler models were still equivalent to full
-models, so the simplest model, Model 4, is still preferred. Lastly, from
-the diagnostic plot of Model 4, we can see that its deviance residuals
-are relatively equally distributed and close to 0, which suggests the
-model is a relatively good fit. Taking everything into account, we
-conclude that Model 4 is the best fit.</p>
+<p>For the project we made use of these following models:</p>
+<p>Model 1 : logistic regression model with all additive terms Model 2:
+forward stepwise logistic regression with all additive terms Model 3:
+the forward stepwise model with only additive terms of the statistically
+significant variables, Model 4: the forward stepwise model with all the
+interaction terms of the statistically significant variables and the
+previous model a modification to the employment term. This modification
+to the employment variable was to change employment to be from 10-19
+years to be all employees with over 10 years or greater of
+employment.</p>
+<p>Of all these models, the Model 4 had the smallest AIC() and BIC().
+AIC and BIC are measurements of goodness of fit of models that account
+for model complexity. Having a lower AIC and BIC value would mean that
+the model would be a better fit comparatively to other models. This
+would suggest that the Model 4 had the best fit. We also conducted a
+likelihood ratio test between all pairings of the models with lowest
+AICs and BICS which were Models 2,3 and 4 From these tests we all had
+large p-values(respectively) between the three combinations of the LRT
+test which would mean that the simpler model is not significantly worse
+than more complex plots. However, this does not mean that the simplest
+model is the best fit. The model with all the interaction terms of the
+statistically significant variables with the employee modification had
+the best fit. Observing the diagnostic plot of model 4 shows that the
+deviance residuals are relatively equally distributed which would
+suggest that the model is a relatively good fit. With the AICs, BICs,
+LRT and the diagnostic plots we conclude that model 4 is the best
+fit</p>
 </div>
-<div id="conclusion" class="section level2">
-<h2>Conclusion</h2>
-<p>Using Model 4 as reference since it is the best fit, we find that
-Workspace, Employment, and Smoking all have positive, statistically
-significant effects on the chance of contracting byssinosis. Since the
-estimated coefficients and log-odds ratios of these parameters compared
-to the base case are positive, we conclude that a dustier Workspace,
-longer Employment (<span class="math inline">\(\geq\)</span> 10 years),
-and Smoking all contribute to an increased chance of a worker developing
-byssinosis. Conversely, we found that Sex and Race do not have a
-statistically significant effect on the chance of a worker developing
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Beginning from the model that best fits the data from above, we can
+look at the summary of the model. This summary of the model would
+suggest that Workspace 1, Employment &gt;=10 and SmokingYes all have
+positive and statistically significant effects on the chance of
+contracting byssinosis. Using the Wald tests and the confidence
+intervals of the odds ratios for the variables, we see that all of these
+variables have statistically significant effects on the chance of
+contracting byssinosis. Because Workspace 1, the most dusty workplace,
+is among these statistically significant variables with a positive
+effect on the chance of contracting byssinosis, we conclude that
+Workplace dustiness positively contributes to the chance of
 byssinosis.</p>
 <div style="page-break-after: always;"></div>
-</div>
-<div id="appendix" class="section level2">
-<h2>Appendix</h2>
-<pre class="r"><code>knitr::opts_chunk$set(echo = FALSE)
-library(xtable)
-# load data
+<pre><code>## $Employment
+## [1] &quot;&lt;10&quot;   &quot;10-19&quot; &quot;&gt;=20&quot; 
+## 
+## $Smoking
+## [1] &quot;Yes&quot; &quot;No&quot; 
+## 
+## $Sex
+## [1] &quot;M&quot; &quot;F&quot;
+## 
+## $Race
+## [1] &quot;W&quot; &quot;O&quot;
+## 
+## $Workspace
+## [1] 1 2 3
+## Levels: 3 2 1</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = cbind(Byssinosis, Non.Byssinosis) ~ Employment + 
+##     Smoking + Sex + Race + Workspace, family = binomial(), data = byss)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.5076  -0.8218  -0.2693   0.2879   1.5709  
+## 
+## Coefficients:
+##                 Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)      -5.1028     0.2643 -19.308  &lt; 2e-16 ***
+## Employment&gt;=20    0.7444     0.2169   3.432 0.000600 ***
+## Employment10-19   0.5678     0.2619   2.168 0.030177 *  
+## SmokingYes        0.6709     0.1961   3.421 0.000625 ***
+## SexM             -0.1503     0.2296  -0.655 0.512777    
+## RaceW            -0.1176     0.2077  -0.566 0.571270    
+## Workspace2        0.1713     0.2870   0.597 0.550546    
+## Workspace1        2.7617     0.2172  12.713  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 324.114  on 64  degrees of freedom
+## Residual deviance:  42.679  on 57  degrees of freedom
+## AIC: 164.98
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre><code>## [1] 182.3771</code></pre>
+<pre><code>##                       2.5 %     97.5 %
+## (Intercept)     -5.62081192 -4.5848382
+## Employment&gt;=20   0.31923027  1.1695809
+## Employment10-19  0.05443102  1.0812555
+## SmokingYes       0.28650604  1.0553657
+## SexM            -0.60034204  0.2997582
+## RaceW           -0.52467718  0.2894865
+## Workspace2      -0.39121682  0.7338872
+## Workspace1       2.33596023  3.1874919</code></pre>
+<div style="page-break-after: always;"></div>
+<pre><code>## 
+## Call:
+## glm(formula = cbind(Byssinosis, Non.Byssinosis) ~ Workspace + 
+##     Smoking + Employment, family = binomial(), data = byss)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.6131  -0.8065  -0.2514   0.3084   1.6743  
+## 
+## Coefficients:
+##                 Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)      -5.2077     0.2375 -21.931  &lt; 2e-16 ***
+## Workspace2        0.1925     0.2852   0.675 0.499666    
+## Workspace1        2.7393     0.1914  14.315  &lt; 2e-16 ***
+## SmokingYes        0.6464     0.1925   3.358 0.000786 ***
+## Employment&gt;=20    0.6596     0.1820   3.625 0.000289 ***
+## Employment10-19   0.5055     0.2492   2.029 0.042508 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 324.114  on 64  degrees of freedom
+## Residual deviance:  43.429  on 59  degrees of freedom
+## AIC: 161.73
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre><code>## [1] 174.779</code></pre>
+<pre><code>##                       2.5 %     97.5 %
+## (Intercept)     -5.67315243 -4.7423365
+## Workspace2      -0.36641854  0.7513960
+## Workspace1       2.36420684  3.1143267
+## SmokingYes       0.26909047  1.0236948
+## Employment&gt;=20   0.30292282  1.0161852
+## Employment10-19  0.01708115  0.9938192</code></pre>
+<div style="page-break-after: always;"></div>
+<pre><code>## 
+## Call:
+## glm(formula = cbind(Byssinosis, Non.Byssinosis) ~ Workspace, 
+##     family = binomial, data = byss)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.3374  -0.9329  -0.2774   0.2242   3.4086  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  -4.4200     0.1571 -28.133   &lt;2e-16 ***
+## Workspace2    0.1542     0.2846   0.542    0.588    
+## Workspace1    2.7389     0.1897  14.439   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 324.114  on 64  degrees of freedom
+## Residual deviance:  70.192  on 62  degrees of freedom
+## AIC: 182.5
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<div style="page-break-after: always;"></div>
+<pre><code>## 
+## Call:
+## glm(formula = cbind(Byssinosis, Non.Byssinosis) ~ Workspace + 
+##     Smoking + Employment, family = binomial(), data = byss2)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.6156  -0.7821  -0.2584   0.3073   1.8354  
+## 
+## Coefficients:
+##                 Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)      -5.1495     0.2190 -23.516  &lt; 2e-16 ***
+## Workspace1        2.6842     0.1704  15.749  &lt; 2e-16 ***
+## SmokingYes        0.6445     0.1925   3.349 0.000812 ***
+## Employment&gt;=20    0.6571     0.1819   3.612 0.000304 ***
+## Employment10-19   0.5007     0.2490   2.011 0.044352 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 324.114  on 64  degrees of freedom
+## Residual deviance:  43.874  on 60  degrees of freedom
+## AIC: 160.18
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre><code>## [1] 171.0489</code></pre>
+<pre><code>##                       2.5 %     97.5 %
+## (Intercept)     -5.57871322 -4.7203201
+## Workspace1       2.35019087  3.0182868
+## SmokingYes       0.26727387  1.0217511
+## Employment&gt;=20   0.30050913  1.0136781
+## Employment10-19  0.01264627  0.9888278</code></pre>
+<div style="page-break-after: always;"></div>
+<pre><code>## 
+## Call:
+## glm(formula = cbind(Byssinosis, Non.Byssinosis) ~ Workspace + 
+##     Employment + Smoking, family = binomial(), data = byss2)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.7071  -0.8030  -0.2876   0.3195   1.8273  
+## 
+## Coefficients:
+##                Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)     -5.1427     0.2185 -23.538  &lt; 2e-16 ***
+## Workspace1       2.6829     0.1704  15.746  &lt; 2e-16 ***
+## Employment&gt;=10   0.6148     0.1704   3.607  0.00031 ***
+## SmokingYes       0.6364     0.1920   3.314  0.00092 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 324.114  on 64  degrees of freedom
+## Residual deviance:  44.288  on 61  degrees of freedom
+## AIC: 158.59
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre><code>## [1] 167.289</code></pre>
+<pre><code>##                     2.5 %     97.5 %
+## (Intercept)    -5.5708797 -4.7144360
+## Workspace1      2.3489479  3.0168555
+## Employment&gt;=10  0.2807494  0.9488551
+## SmokingYes      0.2600059  1.0128046</code></pre>
+<div style="page-break-after: always;"></div>
+<pre><code>## [1] 0.6870723</code></pre>
+<pre><code>## [1] 0.5050566</code></pre>
+<pre><code>## [1] 0.650914</code></pre>
+<pre><code>## [1] 0.5197143</code></pre>
+<div style="page-break-after: always;"></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABIAAAASACAMAAACwdsZoAAAA/1BMVEUAAAAAADoAAGYAOjoAOmYAOpAAZmYAZrY6AAA6ADo6OgA6Ojo6OmY6ZmY6ZpA6ZrY6kJA6kLY6kNtmAABmADpmOgBmOjpmOmZmZgBmZjpmZmZmZpBmkJBmkLZmkNtmtrZmtttmtv+QOgCQOjqQZgCQZjqQZmaQkDqQkGaQkJCQkLaQkNuQtpCQtraQttuQtv+Q29uQ2/+2ZgC2Zjq2kDq2kGa2kJC2kLa2tpC2tra2ttu229u22/+2/7a2//++vr7bkDrbkGbbtmbbtpDbtrbbttvb25Db27bb29vb2//b/7bb/9vb////AAD/tmb/25D/27b/29v//7b//9v///8f3ptDAAAACXBIWXMAAB2HAAAdhwGP5fFlAAAgAElEQVR4nO3da2PbWH6YcdCXWLU8diJXbsNZbyx3tUm2HScjr7oj251wbXclpx5KNvn9P0txxwFwAOJ6/uccPL8XMzIpkiABPMKdwR4AhATSAwBguQgQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiTAfo+/OgYvWz4UHIXESv/kh3z/X5cXTf/Scvv5Tv+Pj7iYch/jhGfAK3R6XPsj7EEsa+qU625ZG3e12blpJJ7eHXTk93aJg3+omlx1vNR9VZZQhLNx1QTLPlV95dPo7++eR/fh3+4WcTt5HRlyNANR/Vmfrph+KOT6fBycTDMHGAIs+6zXEzMjIFR2NPHRub2py8jW/pOMYMBqh4lm02zsYGKH/uh4MDVEzcBMiQhgC9bRi8u/Puk3NnMwSo69/8+ZiYgqMlntJLJJ+EOjov+kxdBgN079fSEE4QoGKmejTww1cnbgJkiD5Am+rwZdNL/OsuBGjygezLxBQcvfFiTt5n62DKTcmUpl3F1jAYoDw3xbwwMkBbZdQP+/DViXsBARJrTok2QMlEcf9VtCnl+jRQfmWWAI0VT9X5x/ntvPIn1l/b2rjbVGblbb9Z+4ApA3RSu2VAgGoDFw3FruvzaJ9XZOImQGVbdQ7eXSj/ciBA2UL9VHOdxaqbgOrrYOq4G2/KAGXryJt8wWWKAI1a8yZAArQjszwmkonmTHOPJaoB6rXh1WG1TUC1dbB+a2AHTRWgdfH78QAfEyCz2sbY9Xm0L/H+0zf5LZvkc/lrePv9l39QPiR1RFzko/DbZTw+V09eftU9QXLjpxfRi7z62hKg/MZkoj5R17LzqeX6PJqijov93pvkzmSP6JM3yvM1D3T54/j0j9FDg2PlE9C9kKIaoGQqP2l96KcXR8mnEf/yo4aPSfdQ7fDVb6yO4/p43aZDGb/ISt3T2OlT02wC2lfXwcprYAenjPIwN/z6o3TqedL0Vg+OquB3R/k7ix57758rAap/VhHNNJu/sjppPqoN0S55J6VBqr67ysQ9ZvTpp+A29gTo9jT/FB5kg59MJel+qXUxJaqHeMQ/xxPjX4stsqvfa54gGs132as8+NAcoOAfqn9NagG6e53/+5m6RH2W78R/8CF/YPNAqx+HukH5Qf4JaV5I/dDaAqR96C67cfVzNUDqx6R5qHb4dDeWx7FuvCZTcD4uan97D3xquk1A1XWwi+JhXaaM0jA3/fqjYurRvdUOoyp49TofrOg9PPxz/pE3fVYN02ynAO0ui3eSD1Lt3bUGqM/o00/B7awJ0CZQnSg3Jkupwb3/k09+6TtNniafWHXPUHqCX0sf0epxPjIV6cio/lWuBqi09ymdzOPXWhc3x4P3vX2glY9jW9qhVTvCQ3khRdsqmPahyl7I1f8qB0j/MeUP1Q6f9sbSON6ov5CN13gwfziq3V6aSlpGtWYTUGUdLHmf6mRUea3KW1aHufHXHygfXv2tdhlVwdlFPozxe0he66zls2qYZrsEaPdafT51Mi29SFuAtIPUMPr0U/ABtgRoG5Qpoz2/pVjX2uSfVr7mU90jnYzk8hNUxkhEvxcs9uRPX7SDd1b6reJJyuMqG4T2gS4+jurxCcrf/OahrQZIPR5Y+9CGD6DyMekeqh2+loGu7SHOn11za211qv1T020C2pfXurbFB9FpylCG+eCvKzcrD+s0qoKzbTaM8e+fbarDXPusGkZZlwBdlB930vDuWgLUZ/TpJ4ZDxI8DOlFuXkUrpR+VP3mb4vfCG8p/ANOf4/ETfQDxbdF6T7JoqHuC9J/RomS2uFybTkof7kpZda5tl1iF6+S7t9loy18rfvbT/L21D3QxspPdb/8e/vRNeU7tCylKAfp2/Vp5T9qHJu/uwb8Xy/XVAEVPpnuodvj0A12bK2vjdVt8VJ+OdG+s/VNLNp/UdnCp253VNbAuU4YyzG2/Ht18XYzc2sMOjargLF/vTTZjKdFsnQdq02xtkS19s+oydfzbDz9kH3LxB7H67pqOA+o1+vQTwyGWBEg9alVZ609He7r6Go+76PbsSaKfsxFa+xOmRiF9gtJC+kUxMkuUKVN5aGkc1Ua+Mhcn00HxSq0DrTzTRpkELu7/+NOX5hdS6A5EVKad6kPVD2Cn1Kr8MWkfqh0+7Y31ubI2XrfKR6U9Xqf9U9NuAspeTflrXBtbjVNGdVG04derI1f/sJZRtfo5r+gmfj7l3es/q6ZptkOAlAjn2wb1764pQL1Gn35iOMSOAJXW2JXFZ3W0p+Miuj2b7fIl0OiRu89/PFa3W9amm/JHrjl2P6VsdovHfbo1SBlHyjZSZXPFJqg+e3xsWOtAVwK0quw80L+QOqz1AKkLz9WHNn0A5Y9J+1Dt8GlvrK1X1serGp3y76TaP7X4dTU7jYunVdfAukwZ6lzX/OvZExbPXlmCPTiqwl9N1y7jd3iiDHLDZ9U0yg4HqLS14+L4x59uGt9dQ4D6jT79xHCIHQEqHf5X7PyuHt26SW+P/n//KLnnQvmUS6+hTGalXbP5UYavlUmm7PpcHcL6gYjq6MpnleS1ys+ev4emgS5Gdjan3f/xXbHurH8hRS1Aq+xPuvahTR9A+WPSPlQ7fNoba+uV9fGq9qG4VdX6qek3AanrYA3n+TVOGfptk9VfL2/JPys9rNuoyjYknCT/PKs2s/5ZNY2ywwEqP2HTp9UWoH6jTz8xHGLHRujS6FUmn01Q+u1sGTy6/1H8n+T51M1du+t/eVxMW+UnKL9M8+U4QtmzFCOmGEf1zYLFIujD2hpb60AXH4f6pNk+uIYXUlQC9CDfd6d/aNMHUPqY9A/VDZ/+xupinWa8qlO2PkAHPzXtnJWtg6nzVq5tytBMl5pfzyaWYpDzh3UcVeGvpmuX22RIK2sw9c+qaZR1DFDTluDyu2sIUL/Rp58YDrEoQI/q/9wo73Sfb4Us9h88/HpbHNi1399dvihmyGK6yZ+g/IFWXrTuU7oglDyiNUAntefLx1brQKsb/EprfnFKGl5Ika/pfbtUNhI2PrTpAyh9TA2vqhm+phvLU7BmvJb+tGqPwm391Bo2ARXrBrU//oemjMp02fDr5ZF7KEANoypdPLpIxkQlQPXPqmmUHQ5Q+ZGK+rtrC1D30aedGA5xIEDKZxj/+yz54xGN0NXPm+LpPpaXBupLzn0DlO13UDbIDQhQ60CXjtq4VN9Av6l6nx+Fkf7dHRCg0qY2zavWh6/hxo5T8EPNyuK+/LsNn9pG94D8lcNXqCzcHp4ySiOi8dcnCVDyVH//PFAOsTcZIN27GxIgzejTTiEHWBSgplUw5TNMFsw38Y3xKFcOLE12/QXHP777z4ZV98pCqXYV7OaXPz5WblNm8GqA9LNMfRWsdaArH8e3y2LF71HjCynU3fAbdbS3bFlpWgUrB0j7qpXha7ix4zJ8e4BaPrWmTUDZcyWHrBarQB2mDHVEHP71xlWwTqOqONDjTN3G3PBZNU2zQ1fBtO9uyCqYfvRpp5A2dgRIt7VLM1KSex6cJu84eud/9zxQFsvTbfBN2w47bISunkJd3SVZ3whd2NSfveiVfqB1H8fN/34RZM908BzB0nFAF4EyBNqHtm6E1rRTRx0+/Y3tWzHzDa7tAWr51Bo3AWUz97o+1g9MGdVh1v969qKHNkJrxaMqP/Yre7oiQA2f1UQboberH/70/mvTu+uxEbrD6NNOIU3sCFDrbng14pt03OWjJv8Mq4fp6Caz0rZJ7W746tnkyihQXqA2WMqwVXfDtw60uhH6+vLFf/m58mD9CylKAUqnbOW47OpDmz6A8i9rH6odPu2NXffjtgeo5VNr3ARU2smaP2OXKUNfkqadZrq32m1URZNSvraWH9vUthu+aZR13A2fPTI7Jkj/7obshq+NPv3EcIgdAdIc8aSZMfbFXh/1hKW4D+oisDKxlJ+g6Ti8yuAVw6ccfKWOI/WUz/BPy8v3X4uXTQ4bSp79oXIApW6glY9DedPKtKp/IUV5RKfz6VnjMLYeiJh/TLqHaodPP9DtR7LlBxIeClDzp7bR/r7yZKVx2GnK0K9LVX+99MlV9mJ2G1XKAWPqvuuGAxHbjh09HCD1QMQsJQ3vrvuBiM2jr2FiOMSSAKWnHGoPQ1cDlP2FK44RTd9zehbUq/w4cO1klp6J8KZyJoIinTievt/ne5bUcfTww/76SzaZP/u63yWnFquHbUfDoJyK0TbQtT+88XHz0fXBs+fUvlD1cys+zoug+CXtQ4tTMa5rp2JUVvYrD9UOn36glXHcMF67BKh1VDf+cc2PS6j81Tk0ZVQCpP/12nk2tZn10KjKT+XPnlgJUNtnVZ9mOwQofWQ4Kf8tO+2i4d2VJu6ho08/MRxiSYCKBe5A/Vw2tfeR/oU7UX4+0z5Bccis8gSHT0bV7M14VBnCk/rxf2faIShvVNENdG1xt/qc2hdSVAKUPslJ40PbTkYtPibdQ7XDpx/o2rxRewNdAtT4qbVsAlLeYPGE1UHQThmVdSn9r6tqOxE6jSr1rE1lwUk/CZ+V31Gua4CKxcHijejfXWniHjr69BPDIbYEqPJWT5QbSwFS1zKSn0vXX0gc5ycNVZ9APVThh/y3SgNYPhGjeHQ+gcXHgpamNmUkPigeXrzLxoFumYDTT0D3Qgr95ThK++XLD1U+pnv/PWj6mHQP1Q6f9sbSON5o35X6ek0BavrUWjYBFa9Xuzp9onHK0P8lqPy6cq2V6ip0x1GlbC5IXrx0poX2s2qYZrsESHM5Dv27K03cg0effgo+wJoApYttsfxiRpWpJHu8ei2EfFrMT+FavYrvKFa3SwdK52dZnNxqA1Q9mKH4KsJ0mTV5yJ0SmlfqwP6/7AWUA7GaB1r9OO6UE0Cy59S+kKIaIHXa1j9Ue3Wr2seke6h2+HQ3lsexbrx2ClDTp7bR/7r6iZTHa5cpQ/1L0Pjr1avNVd5qh1GlXtuj6Ei+rKD7rBqm2S4B0l2QTPvuShP38NGnn4Lb2ROgcPj/mFz78X1+S2UqiShH71SOvdh9jK4vFV9SNP9QNE9w/SL+rS/7hgDto0OgkytVHf9YOrUuuTDmD+ltyZUqV0/eVHceVa7a2TrQ5Y/j7l/Sb2R9ow5x7YUUtb0N6fx30vLQfPhaAqR/qHb46jdWx3F9vHYKUMOn1roJKE9wafG/w5RRWnBo+vWz9AqnLZdkPTCqimU4dXVVGdr6ZxU/b32a7RSgveaSrLp3t1cn7jGjTz8Ft+G74SejmYvtdvDQFWBuBGgyDgRo9/p4/VO+g5gAQRwBmowTAQqKxeu2tWHADAI0GQcClG7+jDehJgcCLeFbVGExAjQZFwJUu4AZa2AQRYAm40KAqkeW2T648B0BmowTASpfDkbz/XmASQRoMm4EKPr63Oybebt9bwEwHwIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMXYHKABgkeln8cmfcULSnzaAssnn8amfcEozBBfAYAQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFA5bvn+aYQAFoEqHQvBQJMIkDqnUHlBwCzIkDKfUGXXwMwGQKkvY8CASYQIO19BAgwgQBp7yNAgAkESHsfAQJMIEDa+wgQYAIB0t5HgAATCJByH7vhAbMIkHonByICRhGg0r2cigGYRIDKd9MfwCACBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGFcDtPt89e5L/4cRIMAmLgXo202WnE+nQWT17GvPpyBAgE0cCtD358G9X6Mfdm+DzOqs33MQIMAmLgboIirPD+v1iyhB/QpEgACbOBigbZidZN3r7nWQNqkrAgTYxMEAhQtAj9KbdmGBTvo8BwECbOJegKLo5Otd4dLQwz4bogkQYBP3ApRvClJu64wAATYhQADEuBeg/UWw+jm77faIAAHucixAUXm2yoZntgEBLnMrQKH7v3v/h3wRKLqJvWCAs5wLUCJe79r99YjjgACXORSgsDjXly+OigBFRSo2B3VCgACbOBWgWFyhLEAPPvR7MAECbOJegAq7v/TMDwEC7OJygAYgQIBNCBAAMQQIgBgCBECM4wFqPxcs0DA4cAAOIEAAxHgdoDoCBNjE8QAp35TRCQECbOJ6gHoiQIBNCBAAMQSofDdbqgGDCFDpXgoEmESA1DuDyg8AZkWAlPuCLr8GYDIESHsfBQJMIEDa+wgQYIJDAVKvCa2Y7EhoAgSYRoC09xEgwASHArS/OyVAgFdcCtB+97rn14DVECDAJk4FKC7Q2ZgnYDc8YBO3AtT78htVHIgI2MSxAJW+GH4ATsUAbOJagMKVsDGLQJyMCtjEtQDtb9frfxv+aNoC2MS5AI1DgABDOq1PECAAM+i2RZUAAZhex33KBAjA5LoeVUeAAEyu63kFBMg2HAoADxAgLfvnaw6GhA8IkJb1szWng8ALBEjL9rmaE2LhBwKkZftczSVB4AcCpGX7TE2A4Ad2w2vZPlMTIHiCAxF1bJ+pCRB8wakYGrbP1AQI3uBk1DrbZ2oChGUhQFZhNzyWhQDZhQMRsSgEyDKcioElIUC2oT9YEAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxDgYoN3N56urq3c3Xwc8lgABNnEtQNfnQeHp+74PP/B2sycePHgA+nArQHenQdmDn/s9QfvbLZ53zEAC6MqpAG2PojgcrxOPo3+szno9Q+vbzcNDgQAzXArQ9+dhcN4oN3wKg3Tv1z5P0fZ2lewQIMAIlwK0qeUmStJJn6doD1C33wMwFYcCtHsdBNUVrm0QPOyzN4wAATZxKEDh4k5tfUt3WxsCBNiEAGnvI0CACQ4FKFwFW1X3urMKBrjMoQDtL2q1iTYLPerzFAQIsIlLAbo9Cgv0QbnhLuxPbaGoFbvhAZu4FKBoP3xYnPVPV5FfkiMRe+2F50BEwCpOBWj/8ahyKsbqVb8n4FQMwCZuBWi/u1QTtHrZ94x4TkYFbOJYgEK766vL9Xr98ur9gOtx0BbAJu4FaBQCBNiEAAEQQ4AAiCFAAMQ4HqD2c8ECDYMDB+AAAqR7wNSDCUDL6wDVcSAiYBPHA7T/dvOlz69zKgZgE9cD1BMnowI2IUDa+ygQYAIB0t5HgAATCJD2PgIEmECAtPcRIMAEAqS9jwABJhAg7X0ECDCBACn3sRseMMuhAEXfw6wx3ZHQHIgIGEaASvdyKgZgkkMB2t+dzhwgTkYFzHIpQPH3EPb7Gp4q2gLYxKkAxQU6G/MEBAiwiVsB6n35jSpWwQCbOBag/XbcShgboQGbuBagcCVszCIQu+EBm7gWoP3tev1vwx/NgYiATZwL0DicigHYhABp7yNAgAkESHsfAQJMIEDa+wgQYAIB0t5HgAATCJD2PgIEmECAlPvYDQ+YRYDUOzkQETCKAJXu5VQMwCQCVL6b/gAGESAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAJU8dtvJoYDQIQAVVEgwBgCVEWAUlwaAPMjQDUUKMbFkWAAAaohQBEuDwkTCFAdBeIC2TCEANURIL4iBIYQIA0KRIBgBgHSIEAECGYQIB0KRIBgBAHSIUAECEYQIK3FF4gAwQgCpEWA2A0PEwiQ1uIDxIGIMIIA6VEgTsWAAQRIjwBxMioMIEANKBAwPwLUgAAB8yNATSgQMDsC1IQAAbMjQI0oEDA3AtSIAAFzI0DNBAvELnAsw7wB+v480Ln369Qv2nng3AgQBwFiIQhQC6kCcRoElmLmAL041nlCgNpwIigWg21ALcQCpP8Z8A4BaiNRoPLWHwIErxGgNgIBqmx/JkDwmkiAbr5O/aJd9X27xgsUhSceyLRABAheMxSg3S/rzPFjZ/aCmQ9QnB01PQQIXjMToO2Rk7vh98YLlC781H4G/GQkQLfl/gRPnVkFEwpQvvBDf+A3IwHaRNH55Xmw+qfL0yBYnU39kt31f7tmC5SlJ1344UBEeM5EgHavg+Bkv78IgrM4Rg/FFoAcCRCnYmApTAToe7js83OcnpOkRnKLQAPertECKedg0B8sgKEARZudt0HwaJ//T4YrAar+DPjJYIBuj+KVr/Bfcutg9geI08CwJIa2AUUBSsuT5kjGkLcrUyDWv7AERvaCXcTbgIoOEaBmbH/GkpjaDR9t9kl2g20ld4MNersyBTL5moAQIwGKrksWRidMz733f3vu2EboxV4cmhJilE4TkKFTMeLTL6I98JFofWys3eerd1/6P4wAdca6IEbpNgEZOhn102m8+ec07s+rgc/87SZLzqfTpGTP+q7LDXu7SywQW8MxSscJyPDlOD6t1y8HLLjE8q3Xu7d5W/ue1kGAOuJ4AIzSdQJy6IJkeYAuovL8sF6/iBLUr0AEqCOOiHSWHWvOXScgBwO0DT/cZN3r7nXfS3sMfLvLKxABcpUl2+48DtBFsRstPc21OwLUEQFylC3b7mwK0O6P67IfBx0HlAaodDZr34OKhr7dxRWIALnJmm13NgWo9vWEw46ETgNUOpK672HVBKgjAuQma8YbAdIPHAHqxpoJGb1YM95sCtD+203ml/Ng9epm2I74YhtQcSTj7ZGZAC2uQNYsyqMXiwJk6W74MBkDD0SMAhSVZ6tseDa1DWhxAbJmYyZ6sSZAlh6IuI/OTB14KkayJnf/d+//kD9DdJOJvWALDJAtu3PRiz0BsutUDEW4CDTsZFR1U1K83rX765Gh44D2Sy6Q9HCgB4sCZNPJqKoR1wPaXV++OCoCFBWp59IUAYLXnNt2J7IENOqCZHGFsgA9+NDvwSPeLgWCA1zbdiexDWiqC5Lt/tIzPwQI3nNs253hAO1u/hw4d0GyBAGCE0qH3EkPzEESByJOcUGygca8XQoEV7hTIIEADb4g2QQIEBbAoQ1BRgL04rjwZPAFyaZAgOA/l3aFOXQ5Dp32ffqBxogXo0Bwgk0HAx1CgLojQHACATLG1NnwMQIEJxAgc771O7V+3NulQHABAcrsPl/pvHPrm1FzBAguIECZ2qXIguJMLhEj3y4FggMIUIYAAcaxGz6Tr4KdB8Hq6U9XV/9yFKxejlwF291Ez/ruZsiTECAsAAciVmyC4B++5j/2uoRYxfW5siT19H3vgRv5dikQXMCpGCVb9fzTi77fZqq4O62szD3oeVoZAcIiuNIfM98L9lo9//T2aPDlOLbx1ciO028XexyfWGbiq5kLBAiYkqGTUZXNzsOviBhfAfGNcsMng5dkTVEgYEIuBWhTy425i9JnCBAwIUOrYMpmn77fpNPwNMOebPzbpUDAdIxshFYXXe76LrTkdItORs8FixEgYDpGAhStKT2IN97sPvbebKM+CwECvGLmOKBtsk/wOP7v0Cuylnem5U9seBWMAgHTMXQ2/G1xAE/fb9IpXNRqE20W6nWFewIE2MTY5Tiuz6Pjdu73P3i5cBuuvj1U83X3uu/yFAECbOLU9YA28Rrc+qf49LJfkiMR+23QnuLtUiBgKk4FaP/xqHIqRt9v2CBAgE3cCtB+d6kmaPWy7wFFBAiwyezXA7r3a/2qQCO/G/7qcr1ev7x6P+Bwxkne7kIK5Mz5jHCYewEaN3AEqCt3ruiAErdG28wBenH85NfyFxPGX07odoAWUaB8CnZmUkbMsT8cjm0DGosAdaRMv45MyYi59oeDAA2wiADpf4bdnPvDQYCG8L9ABMhNzo03swGKjuN5OvhUjAkQoI6cm5ARc268GQrQp9Noz9dm1MmoUyBAHTk3ISPm3Hgz9q0YYYBuj6T3wk/2dr0vkHMTMmLOjTcjAbpNLgIUZyg6gX3M9/KMQ4A6cm5CRsy58WbqiogPv2bXztj2vILGpA683e5HUPheIOf2piBGgJq/lidaDjobc1H6CbS/3R7HcPkeIOeOJ0HMuT8cBr8VY5Nsf7Y3QH3mOe8D5NoRtUi49ofDYIAuks3P1gao361KgWwAACAASURBVB+P5RRIejjQi2N/OMwFKLt86ohvRh2vPUDdfi8xb4CcmoZgFbemHXPfC5ZuAooWhOzcCG1RgBz7KwYMZWov2IP3f4jXwHZ/DupfL2jOdAGas0CurccDQxn7XrDISfKT3AKQGwFybk8GMJSZI6GTY6Affo0D9ExsC5AzAeo1IIC7DJ0Ltvu0/jH6Qp7v/3XM9/KMN2GA5isQAcJicDkO5b5+az4ECBiLAKl39tv2O1eBCBAWw1yAvl1dvfu6332Z+vV6mexUjAgBAkYyFaCPj5PrcHx/Pvy74Scw2cmoEQIEjGQoQG+zCwF9f+7DBclSMxWI3fBYDGMXJAse/OtRekKG3JkYbgSIAxGxGMYuSPYqXPiJTkJNzsuQ4kaAOBUDS2EkQMnpX0mArL4gWV+zF2impwcsYfCCZGmArD0bfgD/r8kBzMrg9YDSAFl7PaAhKBAwBgEahQABY7AKNgoBAsYwtRH6JA/QxqON0BQIGMVIgLbpMYhRgLbWXpBsEAIE6HXalWskQNGxP6s3UYDiCyJ6cyDingABDbodzGbmSOjskogxf07FiFAgQKPj4fymLkj2Ou+PzSejDjBPgDgQEW7rekKjsctx3J1H58OvZC+I6EqAOBUDjut6SQcuSDbWDAXiZFS4zuoAffbmOKD9HAHichxwnsUBujv350joyOQF4oJkcJ49Afp2eXx8/LK4EuvHI49OxYgQIKDKlgDt3qb73n+f/vs8uTKiEAIEmGBLgC7y/Tkn0T8/HikxEjDL/Dx1gQgQnGfJbvjoxIvVy6vLo2Sx5630gUAECDDCjgMRL9L1rbvn0SLQW9nFnz0BAkyx4VSM4gLQmyB4+FH6OOi55ueJC8RuePjAgpNRiy/huT0KVo+D4B/kzkONOREgDkTEYsweoHSPV3w66kruOhwpNwLEqRhYCpMBkjwNPjXTHD1bgSZ+WsAyJgN0MvVL9edKgIBlMBggCxaAZtuoS4GAIQwGSO745wIBAmxCgCZBgIAhCNA0KBAwAAGaBgECBpj/QMSfriK/HGU/hd75dEGyBAECBpg9QDp+XY4jQYGA/gjQRAgQ0N/MJ6N+vtLxcBWMAAED8K0YU6FAQG8EaCqTBohzwbAMBGgyExaIs+GxEA4GaHcTbVl6dzNkQ5IbAeJ6QFgK1wJ0fa7sTev/Pc9OBIgrImIx3ArQ3Wllh/6DnmfYzzpDT1UgS64JzVog5udUgLbRl/oEx+vE46D/RRYJUI+hoECYnUsBiq+q+Ea54dNR34MaCVD3gWA7FObnUoA2tdz0vs7ivDPTRAWyIUBsh4IRDgWo+I6fwjYIHvbZG0aAHBoGLIBDAdJd0aPvVT4cCFB5ywsBgtcI0JQmKFB526/gJiD9z8CkzAXoW3wS6u7L4CcOV8Fq17W3axVsggCpxxhIbgAmQDDCVIA+Pk4uw/H9+fAvZ76o1SbaLPSo18DNPC+NLVC65CO/C5wAwQhDAXqbXQdozNfz3B6FBVLzdfe677cdOhCg7P+yh+AQIBhhJkCb6KDlfz0KAxQts/Raaao+TbBapxd5TY5E7Pdth/YHSP+zceyGhxFGAhQturwKF36i7cW6nemdfTyqnIqxetVz4OaemUYWyJoAcSAijDASoIt4S00SoGi7ca/NNiW7SzVBq5d9l6UIUGfy26GwACYClO6+SgMULg4NXgeLn+366nK9Xr+8ej/gWQhQd/QH8zMRoPRgnTRAot8QNv/sNK5ANgUImB8BmtjYAAWaHwFfubcKNooDAbJm2y+rYJifqY3QJ3mANmM2Qo9lYHYaX6DAiu2/VgwEfGckQNv0GMQoQOHPw3fD17SvzwUa/5HKfsfWf2czv+DrW/V58G9f/72fmCZA0bE/qzdRgHZ/DkYciFjXO0D/UfkArP13ei6q3OsH8z4//+bfyb/3E9MtUpW+onnwqRj6J7bpbPjY6DNSbTgKmd1xMMLQuWDRMlBq+MmoOt9uep1e70iA9D+bZMMwYAGMXY7j7jw6dWvV/5t0JmVkXvLhhDAbhgEL4NAFyaZAgBwaBiwAAZoeAQI6Mhag3f+N9n19/29/Gr0LzNavZi54cEKYDcOABTAUoLsXQXYexur3Y57d4q9mLngRIPk9cVgAMwHaZt8gGO+P73cNMZXdX82cGx0gC2Z+i84JgceMXZBs9SxeZfr2dsSBQJZ/NXNhqgJJzvycigEDTJ0LVhz9fDH4XDDbv5q5MMW16cVnfgsGAd4zeDZ8avjZ8Bvbv5o5N8XB0Mz8WACD1wPS/qsH+7+auTDRlzQDnnMoQA58M2qOAAFdGFoFUxZd+i605FwKEAUCujCyEXqj7PmK9ogN2w/vwFczFwgQ0IGRAMVH/zx9c3Nz8/l8xPWAHPhq5gIFAg4zcyDibenbvDz+auYCAQIOM3UqRnEGxdPhJ4Nt4n7Z/NXMCgoEHGTuZNTPf1yv1z++GXUuqv1fzVwgQMBBjl2Ow/qvZlZQIOAQxwK0t/2rmRUECDjEvQCNQoAAm5gKULwFKPOjx9+MqqBAwAECu+H7nsE+JQcCxHmoWBBj1wNaYIAGFciKK3EAhpg6FSN48tNNrtdXeU3K+gD1uxYZ63iW4Y9HX6ZORh14DbKpGZ40ehdImXYPD+pvmd7DhXmw+NqboctxTPl1zGPYHyD9z7qnrhowfJhUv8VXRMxfD0iU6Qmjbxa6BqiUHDJkh16Lr0gYWgUjQN10CpC+NCRImg1fp+QcUxuh+315xWw8CFB7ZUiQHAI0gKnrAVmyCGR8uuhZg0PTcIdlHBIkhQANYOxAxNXLm6lfaQC3A9RxFYsEySBAAxjaCL3MAxEj/VLQuh2ze1cokAQCNAABmlnvRaDGPbm9ojJBgjikpScCNICRAL04LnuyoAANKJB+xu9ZlNHrYRxU1xe74QfgchxzmyhA/XMyLkEcVNcfn1l/BGh2vSrQNA0PasmIBPHXfAiWGnsjQLPr04Cm+X5oSAYXiO0Zg9CfvkQCdLOMC5Kl+gVI+/OIdamBCSJAMMJQgHa/5JdDPH68qL1g+14F0s/3ozYnDysQAYIRZgK0XeQVETNjAzR2j/qQBBEgGCFyRcQR3004ksy81H3+bwjQ6Nef8bogwAjGroj49JfnweqfLk+DYCV4YqqLAZrioObeBSJAMMLUFRFP9vuL+Jz4MEYPxRaApOalzrO/Zr6f5qyKvgtB7IaHEQaviLiJMxTVSG4RyP4AKdKHTnNW1+ACsVMZMzJ4RcRtcmXoreQFoqVmpkEFSh442VmlPRPEQXUwwGCAbo/ila/wX3LrYK4FaNKz2gcWaLoBAKoMXpI1LY/o1cnkAtRt1q+sgk19VQ0u0wHLGNkLdhFvAyo6tLwAdV0EKm+Enj4XFAh2MbUbPtrsk+wG20ruBpNboeg245cCNEssKBBsYuqa0FF0wvTce/+350vcCN11xleHb6ZUdF4IYhsQRuj4HS2GTsWIT7+I9sBHBL+lUHB26jTflwM024B0ayEFwiDq99Qdmn4MnYz66TTe/HMa9+fV1C/ZneTc1DFA2Wwfjrv5hqTLXyaOA0JflfR0+Atm+HIcn9brl1+mfsUeRGemDgUqRtpvMwaoQ4E4Ehr9qO2J/t3xLxgXJDOn23JHfgD0rIN6KEGcC4buyumJdf0LRoAM6hWgmQf1QIEIEDrRtCfWdQIiQCYdLJCyAWj2bS+tCSJAOKgpPhE7ApQcdLjo7wUr6bDpZZ9vAJp9WNsKRIDQ4re29sQIkH7ghOelDgHaZ50yMKzNE5CyO078Q4NNqhubG1gSoBfRlxAu+4sJyw4UKAtQ8fPcg9MwQOW/GPMPCOzXMT0JOwJkHfF5qcvOp/RXzAxrw9RUZIf+oMs6VwUB0pKfmQ4vuP5mNEAN315IgJDqm56ETbvhd3+RuwZrhQUz04EABYb7s9cniFUw7IfGJ2bRgYjfnwcP3tjRIBvmpQMFyvtjcFDrkxgboRdveHsS9pyKkewFe/J+6lcawIZ5qX2UFufQGBug5GXLg0WAnDV++um9wWfEgBjZBvQpPgk1WD39MPWL9WXFvNQ2Wn/LA2RuePJXViY4VsFcNW6s9drTNQVDG6F3l4+TBr2UXRWzY15qHremRnvTi+evX9oIbcWHhk4G7zwwnp6Eub1g3y6T70cV3Rxkx7zUPIqlL1eYT36lnRhWfGjoouvOJ9VvQu2JGd0Nf3eeNGhpX81c0zSipfuzzxNEgNzU7xQa0fQkTB8HdH0eLPlUjIx+dIuugOXS6ZFVMBd1DZAF6UkYDtDu0wsCFNGNdTv6s1emTjZCu+ZwgKxJT8JogOL6iG6JtmZe0k0ENkwPmUAZPms+NBzUGiC70pMwF6B45SvaACR5PJA989JvGvEddix1pCel2Ta54oCGANmYnoShAGWbnx+8mfrl+pGerzUqk4YlB98UL68rpW1TMTK1ANk+1oycC5bugJc+CGhvZYDKBh/GMddwxJ+ZPkK2TtNLpo43J0aTsVMxJj4Mevf56t2Ar9ewPUBDDuOYR/uB0JTIVkF6QQVXxouhAD2ZYtXr202WnOzcjmd9F6nsD5D+ZwHd1gUJkUVcHBVGVsHeTbLqlVzfNXq+t/m8sTrrOXAEqKO+p4JRIjn1z158G2JnDl2QLA/QRVSeH9breKd+vwLZPlqsCdDgdUFCZJL7H7XBc8GursIlod3w70XNArQNZ45k3evudd+DGglQR+MHhBLNypdP1lSAPj5OjoD+/vzB0I3RWYDCBaBH6U27sEAnvQaOAHUz3YAQoon59VkaClCy1Sb5ip7Vz8OeOA1QFJ18vStcGnrYZwMTAepohgGhRKN4+uGZCdAmOgbxX4/CfkT56JWMQhqgfFOQclv3gbM+QJbshp+xhPUQ+TIzzcLzT8tIgG6PguBVGIvaAkwvSwiQRQci6n+eEiVqsZTPxkiAkq02SYCitaZH9V/poNgGVKzEhWnzK0D2nYph4EPTlMjvua7F0j4CI8cBvY6TkQYobMawdbAoQFF5tsqGZ9+2Ae3tORm153FAk1h0iJb3jiOGjoRO1p3iAPVda1KfJnT/d+//kC8CRTd5tRfMHiIBqllIibx/g82cC1CQ7U8Ll6z+euTbcUD2sCNAmZaVNLfnWG/eyFAOrYKFT3R9+eKoCFBUpJ779G2YmZwgswp2WFuJ7J+RHRzkuZnaCH2SB2gzdCN0Kq5QFqC+RzVaNTPZzJoDkg5yoEg2D5s0IwHapscgRtnY9j5/q9HuL70PqrZ7XrKIOwGqsadI5OYwIwGKjv1ZvYkCtPtzMPhAxCk4Ni/JcThANR2KNDPpT8BiZo6EVrcfDz4VYwquz0vG+BSgGsJjD0PngkXLQKnBJ6NOwbt5aS5eBwj2MHY5jrvz6Hz4leh3YjAvdUaAYIRDFyTT8e5cMFtYc1Ys/EaAoGXLWbHwm6EA3VyFhnyNxQEEaDZWHocI35gIUPodFpEnU28CKr4poxPmpu7oD+Y3f4Bui/yI7wQjQIBVZg/Qx6Q7x0/Wx4+Tw4AmOg56EAIE2GTuAEVnXgTPstWku3OjByIGGqZeexy3hhYYauYA1U5Yj67OOvJUjN3N52iL9s3hZ3E2QI4NLjDUzAHa1hZ4ogKNWAm7Pldi0v+oRjfmaHaBYylmDtBF/YqFFyMux3F3WlmeedBzdc6JGZqDALEY8wYovRRZSd/LOKsPja9GdrxOPB6wSduJGZrTILAY8wZI9zWEfb/IovRsweqNcsMnPy/JSoCwGLMHqBaIwdeEjq6lWHmknxelJ0BYDIcCpPtKQw+/locAYUEcCtAUT+bE/EyAsBgEyD4ECIvhUICm2KXmxPzMbngshkMBio4gqtQm2izU66AiN2ZoDkTEUsy/G/6nq7JfBu+Gj0/jUE+mv3vd98wyR2ZoTsXAQsweIJ2BAYr2w4fFWSdJ+yU5ErHXXnhXAsTJqFgIpwK0/3hUeabVq54DxywNWGTmUzE+X+m8G3w6/O5STdDqZd8nIkCATdy7KP3u+upyvV6/vHo/IGMECLCJewEahQABNiFAAMS4GqDvL46fDNiUTYAAmzgboGGHMxIgwCYECIAYAgRADAEq380ByIBBBKh0LwUCTCJA6p2chA4YRYCU+7gMD2AWAdLeR4EAE1wN0EAECLAJAdLeR4AAEwiQ9j4CBJhAgLT3ESDABAKkvY8AASYQIOU+dsMDZhEg9U4ORASMIkClezkVAzCJAJXvpj+AQQTINkQQC0KALMNqIJaEANmFDeFYFAJkFQ4FwLIQIKtwMCS80WlbAgGyCgGCL7ptzSRAViFA8ETHrZkEyCoECH7oujWTAFmFAMEPXadkAmQVAgQ/ECAt22dqdsPDDwRIy/q5mgMR4QUCpGX/XM2pGPABAdJyYLamPxjFjgmIAGlJjxZgZpYsQrMbXosAwW/WbETkQEQdAgSvWbQblVMxNKRHCjArmw4k42TUOulxAr+Jb36xKUCdECBgKvIbgAkQAcJSWbABmAARoJGk/4ZiKBs2ABMgAjSO/FI8BgpHWT7upEYfASJAo1iwFI+BghKxYSh+lBmEfgiQVZybflAI1L8ecutgbv0FI0BWcW4JGoXSXw/B/WBOrcMTIKsQIIdZMvKc6g8Bsosl0zCGYOQNQICswjTsMDtWwRxDgKxCgBxmxUZoZVjkh6IDAmQVAuQwG3bD1wZFdDA6IEBWYTe8w2w4EDEbEmf2xRMguzg06aDCmr8e1gxIBwTIMu4sPKPKlr8eLq3IEyDb0B93WfLXgwBZy/bRAbdZ0R8CZC/bRwcwHgGylu2jAxiPAFnL9tEBjEeArGX76ADGKm2Hsn6CJ0CAT0p74sS3hx9EgACP5OGxYn/cYQ4GaHfz+erq6t3N1wGPtX+EACMUq15u9Me5AF2fK+f7PX3f9+EOjBFgOJe2P8fcCtDdafmM4+DBz/2ewIFx4szfLliIAM0ZoO1RNGcerxOPo3+szno9g/3jxJ21d1iIAM0YoO/Pw+C8UW74FAbp3q99nsL6cWLL+YxwEwGaMUCbWm6iJJ30eQrbx4lLF1KAhQjQfAHavQ6C6grXNgge9tkbZvs4cW76gV2cm4AcClC4uFNb39Ld1sb2ceLc9AO7OLcITYCsQoAwjmsbER0KULgKtqrudWcVDChxbDeqQwHaX9RqE20WetTnKWwfK/Zc1xyucqo/TgXo9igs0AflhruwP7WFola2j5byYZbSQwPMzaUARfvhw+Ksf7qK/JIcidhrL7wTAcp/kh0UwACnArT/eFQ5FWP1qt8T2D5XEyAsi1sB2u8u1QStXvY9I972uZpVMCyLYwEK7a6vLtfr9cur9wOux2H7TM1GaCyLewEaxfaZmt3wWBYCZBUChGUhQFYhQFgWAmQVAoRlcTxA/p0L5ti5hMAoBMguHAeERSFAluEoICyJ4wHaf7v50ufXHZit6Q8WxPUA9cR8DdiEAAEQ43WAAg3pYQJQIEAAxHgdoDoCBNiEAAEQQ4AAiCFAAMQ4FKDoe5g1PDsSGlgSAgRAjEMB2t+dEiDAKy4FKP4ewn5fw1NFgACbOBWguEBnY56AAAE2cStAvS+/UUWAAJs4FqD9dtxKGAECbOJagMKVsDGLQAQIsIlrAdrfrtf/NvzRBAiwiXMBGocAATYhQADEECAAYgiQbbhyGhbE1QB9f3H8ZMDeMPvna67diCVxNkDDjki0frbmiwmxKATIKnw1M5aFAFlFHT7bhxUYjwBZhQBhWQiQVQgQloUAWYUAYVkIkFUIEJaFAFnFpgBxPBLm52qABrJ9drJoNzxHRMIAAmQXaw5EtGZA4DUCZBlLFjwsWhSDzwiQbazoj1Ubo+AxAgQdAgQjCBB0CBCMIEDQIUAwggBBhwDBCAIEHQIEIwgQdNgNDyMIELQ4EBEmECDoWXJEJPxGgNCA/mB+BAjwjzN/PQgQ4B131p8JEOAbh/YgECDAMy4dQ0GAAM+4dBQpASrf7caKM9CCAFmr/e26s+kOaEaArNX6dh3adAc0I0DWanu7Lm26A5oRIGu1B6jb7wF2C6fefFuC7VMyAdLeZ/toM4HtYa4KVNIDcwAB0t4nPd4smHqcmYRR49DWTAKkvU/+S3GkZ36HpmFUsARkLTcCZMHMzxZ5h7ENyFpOBMiGmd+aDwP9uTTyCJByn/x8X3t1qSGxYRgwkEsjjwCpd4qv+aQvr/95acOAgVwaeQSodK8VW+5smH5sGAYM5NLII0Dluy3ojxXTjw3DgIFcGnkEyD42TD82DAMGsmZrZgcEyD42zPwuTcOosmVrZgcEyD5WzPwOTcOosWRrZgcEyEJWzPzuTMOoc2bcESAbWTHzWzAI8B4BshIzP5aBAAEQQ4DQgKUwzI8AQc+K7VDwHQGClhV74uA9AgQdK45Fgv8IEHRsOBobC0CAoEOAYAQBgg4BghEECDoECEYQIOgQIBhBgKwkfggOAYIRBMhG8gcBshseRhAgC9lwEKANwwD/uRqg3eerd1/6P8yJmcmOpQ/5pTAsgEsB+naTJefTaTxnrJ597fkUTsxNlmx/oT+Yn0MB+v48uPdr9MPubf7HeXXW7zmcmJ0sCRAwPxcDdBGV54f1+kWUoH4FcmJ+JkBYDAcDtA2zk6x73b0O0iZ15cT8TICwGA4GKFwAepTetAsLdNLnOZyYnwkQFsO9AEXRyde7wqWhh302RDsxPxMgLIZ7Aco3BSm3debE/GzHbnjAAAJkIQ4CxFK4F6D9RbD6Obvt9sjHAHEQIJbCsQBF5dkqG5693Aa05yBALIVbAQrd/937P+SLQNFN/u0FAxbDuQAl4vWu3V+PvDwOCFgMhwIUFuf68sVREaCoSMXmoE4IEGATpwIUiyuUBejBh34PJkCATdwLUGH3l575IUCAXVwO0AAECLAJAQIghgABEEOAAIhxPEB+ngsGLAUBAiCGAAEQ43iAlG/K6IQAATZxPUA9ESDAJgQIgBivAxRoSA8TgAIBAiDG6wDVESDAJgQIgBgCBEAMAQIgxqEAqdeEVnAkNOAsAgRAjEMB2t+dEiDAKy4FaL973fNrwGoIEGATpwIUF+hszBMQIMAmbgWo9+U3qggQYBPHAlT6YvgBCBBgE9cCFK6EjVkEIkCATVwL0P52vf634Y8mQIBNnAvQOAQIsAkBAiCGAAEQQ4AAiHE1QN9fHD8ZsDeMAGFOXHezL2cDNOyIRCYNzIgr//ZGgICJ5OGhQJ0RIGAaSnaYzroiQMA01ImLCa0jAgRMgwANQICAaRCgAQgQMA0CNAABAqZBgAZwNUADMV1gNgRoAAIETIPd8AMQIGAiHIjYHwECpsKpGL0RIGAy9KcvAgRADAECIIYAARBDgACIIUBowAZVzI8AQY9dyjCAAEGLg+pgAgGCDqcVwAgCBB1OrIQRBAg6BAhGECDoECAYQYCgQ4BgBAGCDgGCEQQIOgQIRhAg6LAbHkYQIGhxICJMIEDQ41QMGECA0ID+YH4ECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADELC5AAGwy+Tw+9RNOSfrDBlA2+Tw+9RPaxNdVOE/fF29rgbz+cHwd9Z6+L97WAnn94fg66j19X7ytBfL6w/F11Hv6vnhbC+T1h+PrqPf0ffG2FsjrD8fXUe/p++JtLZDXH46vo97T98XbWiCvPxxfR72n74u3tUBefzi+jnpP3xdva4G8/nB8HfWevi/e1gJ5/eH4Ouo9fV+8rQXy+sPxddR7+r54Wwvk9Yfj66j39H3xthbI6w/H11Hv6fvibS2Q1x+Or6Pe0/fF21ogrz8cX0e9p++Lt7VAXn84vo56T98Xb2uBvP5wfB31nr4v3tYCef3h+DrqPX1fvK0F4sMBIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACI8TpAu9dB7kx6YKZ3e+Tbu/r0IhxT919+lR6Oae0uj6O39fSD9IDYyOsAfX/uc4Cid+fVu8r/Xqy8elsfj7Jp8Jn0oFjI6wBtA58DdOHZu/J0eVWdCB9JD4x9vA7QxqspuWLr2Ywaja1VtPb1t9MgeOjNWli0nPrgffjDdfi2Vj9LD451vA7QRXDvV+lhmEuyeulRgMIFoHT+DN+aP3PqNl/uiZbwWASq8jlA4Rj35y9pRfje7v2zVwG6PcpnT5+WXC+K9xK+Q2+nx8F8DlD4l9TbvzjRPOrTfFpy4ecbC6dHAlTlc4DCpd+zu2jH7pM30oMytfCP6YlXCwqqcEb1ctWZAGn4HKBNsPrHdPfDU79GfLJy6WeAdpdHXr4vdXMQcj4H6ELZAerXn56LeCutjwGKx9nqlfRgzMGrbeuT8ThA0V6HeL/u3Xk4UZ9ID86Etsnb8TZA91959ecisbtgAUjD4wApf3HCWdWjrQrZtgQPA7T7H8cvjrxbYI1E/fFoGpyMxwFSRAtD/syr2eFNHgYodnfq37JCvDjOClidZwHKz/6qjOyN4+tg6vvKu+N+gBpGl+tbS+pv647DoBssJEBbfwJUHLDnbYBc/3tRe1vR+agPWP/SIUBOUN7XJihz+X15OrqqbysaZc+826o1Dc8C1MT9hYWcTwFq4niAKt56OpYm4XGAlOV41zcqqHwNkLra5dW5GBs2/7TwOEC3R9l+T08PwfBosW4fjy4vj5oIl+bucS3ERh4HKN7zGR3S5uuVWPwKUD66/Dpu1KeF7zl4HKDob6p3KyoqvwK0v1MuoOvP8mp5jZkWVfkcoP3taTbefy89KHPwLEDxwTIJf3YZqdeZJUAaXgdov0u/ZuGL9IDMwrcA2TuwJAAABZlJREFUZd+K4dPXR6jfi0CANPwOEACrESAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYALdM2KDvZ73evg3u/xnfevUl/K/+hyffnwcOvlec9GT1wn84fh4N0/6nu1WuvWLsBLiFAy9QSoN3btCH5D83mCNDHo3yoVq8OvyIBchoBWqaWAOUN6RCT6QMUVk9VawsB8gsBWqaWUMgG6CJa8Hl2E/707fJIUyAC5BcCtEy2BmgTNudZ9ozx0lDl6QiQXwjQMlkaoPD5So8Pe7T6uf0VCZDTCNAyaUKRbAPKNg6d5T/E9308Dn988iaf0+/OozWlr50CtPv0ovLg+N8fNOnYVNa5wmEKHjW8YvWGZBjvv/zS+8OAHAK0TP0CdJvtmHrwIfndTbqJ+D87BOjuVP/g4O9rAYp6c1YdzuTYgNorVm/Ih3GC4wBgDAFapl4BKubtcg2C4O8OByhaqyo9WN0BVwlQ+ELpoUjKo+N1sNorVm9QXqbSMNiMAC1TY4A024CiefvBm2gd5yhZIYpv+JAesXMoQBfhitLLr/vd5eEHR4/WLxPVHlS7IQzSg/fhA+5ea/bdw1oEaJnKxwHFm1kaA1RkIV0eybfURItGBwIU/kq6GTn9qeXB0aMfVQb0In7C2oNqN1xkCz7FAd1wAAFapj4Buij2RMU3hb+Y3bA5GKBN0ZSkJXkp6g9Wf3mvPqj2ivVBiP73YcAHAVkEaJl6BEjdWRUubzyKbsiWMcJ/HwhQ0ZvDD25cAqo9qP4s8Rta/fAn1r7cQoCWqcc2IHXzbrzBRSnSwd3wyqJKkorag/OnD3+vvg0oCZjuQdVBuMiehv3wLiFAy9QjQMo+sCRAypJLlwDlW2TiX649WA1Q016w2oM0gxBv5U6wH94dBGiZ+gWo8djjiZeAmo4D6rIEtI8u40GBXEOAlqnfKlh5sWToNqB4C0/rNqCmI6E7bANKffvlvL53H/YiQMvUI0C1xRLlhv57wdoenGxvelR+dLQAVXuQ7oasSLVgwmIEaJn6HIgYzuL3irMo1KNyol4MPg6o/uB949nwtQfVbrjIX5gAuYQALVN7gJJ5O/shmsdXr8Kfvr1NFkjiw5Df7/ef+h4JrR7DrHlw+uvh71evB1R7xdoN0W74Z9H+r+vT+r58WIsALVNLgJK9XmfKD+pBQ9mx0Yna+aTl44ui5+tzLlhEf0XE2ivWbrgoHsQCkDsI0DK1BCjavpJdozUtzra6hzu9brP2bPhKgPqcDR/7dJo/XrkmdO0VqzckQxu/zs/1J4WlCNAytQRov4t2JD1TfwhXoCrX2rk7P2q6HlA1QPn1gPJfSq8HFB8ZrXOt+1aM2ivWbrg+PwpK1x2C/QgQpDQGCMtBgGBWcWDQBUcMggDBrGivWLRuFe1SY2vx4hEgmKWeWsYC0OIRIBj2kZNGkSNAMO3b5eOAr69AjAABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMQQIABiCBAAMQQIgBgCBEAMAQIghgABEEOAAIghQADEECAAYggQADEECIAYAgRADAECIIYAARBDgACIIUAAxBAgAGIIEAAxBAiAGAIEQAwBAiCGAAEQQ4AAiCFAAMT8fxzXHfRLcSsjAAAAAElFTkSuQmCC" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>knitr::opts_chunk$set(echo = TRUE)
 byss = read.csv(&quot;./Dataset/Byssinosis.csv&quot;)
 # change Workspace to factor
 byss$Workspace = factor(byss$Workspace, levels = c(&quot;3&quot;, &quot;2&quot;, &quot;1&quot;))
@@ -1880,37 +2057,37 @@ byss$Workspace = factor(byss$Workspace, levels = c(&quot;3&quot;, &quot;2&quot;,
 byss$Total = byss$Byssinosis + byss$Non.Byssinosis
 # remove rows which have no total
 byss = byss[byss$Total!=0,]
+# unique values of each predictor variable
+sapply(byss[1:5], function(x) unique(x))
 glm1 = glm(cbind(Byssinosis, Non.Byssinosis)~Employment + Smoking + Sex + Race + Workspace,
            family=binomial(),
            data=byss)
-glm1_table = round(summary(glm1)$coefficients, digits=3)
-
-glm1_bic = BIC(glm1)
+summary(glm1)
+BIC(glm1)
+confint.default(glm1)
 result1 = step(glm(cbind(Byssinosis, Non.Byssinosis)~1, binomial(), byss),
                   scope = ~Employment*Smoking*Sex*Race*Workspace,
                   k=log(72),
                   trace=0,
                   direction=&quot;forward&quot;)
-result1_table = round(summary(result1)$coefficients, digits=3)
-result1_bic = BIC(result1)
-# H_0: models are equivalent -&gt; use simpler model
-# H_1: models are not equivalent -&gt; use more complex model
-anv = anova(result1, glm1)
-result1_pvalue = 1-pchisq(anv[2, 4], anv[2,3])
+summary(result1)
+BIC(result1)
+confint.default(result1)
+glm2 = glm(cbind(Byssinosis, Non.Byssinosis)~Workspace, binomial, byss)
+summary(glm2)
 # changing Workplace var
 # 2 &amp; 3 -&gt; 3 (less dusty)
 # 1 -&gt; 1 (more dusty)
 byss2 = byss
 byss2$Workspace[byss2$Workspace == 2] = 3
-# new stepwise w/ Workplace modification
 new1 = step(glm(cbind(Byssinosis, Non.Byssinosis)~1, binomial(), byss2),
                   scope = ~Employment*Smoking*Sex*Race*Workspace,
                   k=log(72),
                   trace=0,
                   direction=&quot;forward&quot;)
-new1_table = round(summary(new1)$coefficients, digits=3)
-new1_bic = BIC(new1)
-new1_pvalue = 1-pchisq(anova(new1, result1)[2, 4], anova(new1, result1)[2,3]) # compare new1 &amp; result1 w/ LRT
+summary(new1)
+BIC(new1)
+confint.default(new1)
 # changing Employment var
 # 10-19 &amp; &gt;=20 -&gt; &gt;=10
 byss2$Employment[byss2$Employment == &quot;10-19&quot; | byss2$Employment == &quot;&gt;=20&quot;] = &quot;&gt;=10&quot;
@@ -1920,10 +2097,17 @@ new2 = step(glm(cbind(Byssinosis, Non.Byssinosis)~1, binomial(), byss2),
                   k=log(72),
                   trace=0,
                   direction=&quot;forward&quot;)
-new2_table = round(summary(new2)$coefficients, digits=3)
-new2_bic = BIC(new2)
-new2_pvalue1 = 1-pchisq(anova(new2, result1)[2, 4], anova(new2, result1)[2,3]) # compare new2 &amp; result1 w/ LRT
-new2_pvalue2 = 1-pchisq(anova(new2, new1)[2, 4], anova(new2, new1)[2,3]) # compare new2 &amp; new1 w/ LRT
+summary(new2)
+BIC(new2)
+confint.default(new2)
+# H_0: models are equivalent -&gt; use simpler model
+# H_1: models are not equivalent -&gt; use more complex model
+anv = anova(result1, glm1)
+pvalue = 1-pchisq(anv[2, 4], anv[2,3])
+pvalue
+1-pchisq(anova(new1, result1)[2, 4], anova(new1, result1)[2,3]) # compare new1 &amp; result1 w/ LRT
+1-pchisq(anova(new2, result1)[2, 4], anova(new2, result1)[2,3]) # compare new2 &amp; result1 w/ LRT
+1-pchisq(anova(new2, new1)[2, 4], anova(new2, new1)[2,3]) # compare new2 &amp; new1 w/ LRT
 # new2
 ry = residuals(new2, type=&quot;deviance&quot;)
 rx = qlogis(fitted.values(new2))
